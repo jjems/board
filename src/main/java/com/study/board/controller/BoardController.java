@@ -33,11 +33,10 @@ public class BoardController {
         return "";
     }
 
-    // 1번
     @GetMapping("/board/list")
     public String boardList(Model model) {
         //BoardService에서 만들어준 boardList가 반환되는데, list라는 이름으로 받아서 넘기겠다는 뜻
-        model.addAttribute("list", boardService.boardList()); //4번
+        model.addAttribute("list", boardService.boardList());
         return "boardList";
     }
 
@@ -47,5 +46,14 @@ public class BoardController {
         /* 상세페이지 4 */
         model.addAttribute("board", boardService.boardview(id));
         return "boardview";
+    }
+
+    // 글 삭제3
+    @GetMapping("/board/delete")
+    public String boardDelete(Integer id) {
+
+        boardService.boardDelete(id);
+        // 게시물 삭제 후 리스트로 넘어가게 설정
+        return "redirect:/board/list";
     }
 }
