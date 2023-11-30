@@ -45,7 +45,7 @@ public class BoardController {
     @GetMapping("/board/view") //localhost:8090/board/view?id=1 // (get방식 파라미터)
     public String boardView(Model model, Integer id) {
         /* 상세페이지 4 */
-        model.addAttribute("board");
+        model.addAttribute("board", boardService.boardview(id));
         return "boardview";
     }
 }

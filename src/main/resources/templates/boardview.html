@@ -1,13 +1,13 @@
-<!-- 상세 페이지-->
+<!-- 상세 페이지1 -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>게시글 상세 페이지</title>
 </head>
 <body>
 <!-- 상세페이지5 -->
-<h1 th:text="${Board.title}">제목입니다요</h1>
-<p th:text="${Board.content}">내용이 들어갈 부분입니다요</p>
+<h1 th:text="${board.title}">제목입니다요</h1>
+<p th:text="${board.content}">내용이 들어갈 부분입니다요</p>
 </body>
 </html>
