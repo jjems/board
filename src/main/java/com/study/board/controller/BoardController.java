@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -54,6 +55,31 @@ public class BoardController {
 
         boardService.boardDelete(id);
         // 게시물 삭제 후 리스트로 넘어가게 설정
+        return "redirect:/board/list";
+    }
+
+    // 수정2
+    // PathVariable은 modify 뒤에 있는 {id}가 인식되어 Integer형태의 id로 들어온다는 것
+    @GetMapping("/board/modify/{id}")
+    public String boardModify(@PathVariable("id") Integer id, Model model) {
+
+        // 수정4
+        // 상세 페이지에 있는 내용과, 수정 페이지의 내용이 같기 때문에 위 코드와 같은 것을 확인할 수 있다
+        model.addAttribute("board", boardService.boardview(id));
+        return "boardmodify";
+    }
+
+    // 수정7
+    @PostMapping("/board/update/{id}")
+    public String boardUpdate(@PathVariable("id") Integer id, Board board) {
+        // 기존에 있던 글이 담겨온다
+        Board boardTemp = boardService.boardview(id);
+
+        // 기존에 있던 내용을 새로운 내용으로 덮어씌운다
+        boardTemp.setTitle(board.getTitle());
+        boardTemp.setContent(board.getContent());
+
+        boardService.write(boardTemp); // 수정한 내용을 boardService의 write부분에 넣기
         return "redirect:/board/list";
     }
 }
