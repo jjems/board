@@ -27,11 +27,15 @@ public class BoardController {
 
     // 내용이 넘어오는 것을 확인
     @PostMapping("/board/writepro") //매개변수로 들어오는 것 작성
-    public String boardWritePro(Board board) {
+    public String boardWritePro(Board board, Model model) {
 
         boardService.write(board);
 
-        return "redirect:/board/list";
+        // 메시지 띄우기2
+        model.addAttribute("message", "글 작성이 완료되었습니다.");
+        model.addAttribute("searchUrl", "/board/list");
+
+        return "message";
     }
 
     @GetMapping("/board/list")
@@ -58,18 +62,15 @@ public class BoardController {
         return "redirect:/board/list";
     }
 
-    // 수정2
+    // 수정
     // PathVariable은 modify 뒤에 있는 {id}가 인식되어 Integer형태의 id로 들어온다는 것
     @GetMapping("/board/modify/{id}")
     public String boardModify(@PathVariable("id") Integer id, Model model) {
 
-        // 수정4
-        // 상세 페이지에 있는 내용과, 수정 페이지의 내용이 같기 때문에 위 코드와 같은 것을 확인할 수 있다
         model.addAttribute("board", boardService.boardview(id));
         return "boardmodify";
     }
 
-    // 수정7
     @PostMapping("/board/update/{id}")
     public String boardUpdate(@PathVariable("id") Integer id, Board board) {
         // 기존에 있던 글이 담겨온다
