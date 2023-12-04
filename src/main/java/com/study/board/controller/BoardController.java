@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 public class BoardController {
@@ -25,11 +26,11 @@ public class BoardController {
         return "boardwrite";
     }
 
-    // 내용이 넘어오는 것을 확인
+    // MultipartFile file 받아줌 // 예외처리
     @PostMapping("/board/writepro") //매개변수로 들어오는 것 작성
-    public String boardWritePro(Board board, Model model) {
+    public String boardWritePro(Board board, Model model, MultipartFile file)throws Exception {
 
-        boardService.write(board);
+        boardService.write(board, file);
 
         // 메시지 띄우기2
         model.addAttribute("message", "글 작성이 완료되었습니다.");
@@ -67,12 +68,14 @@ public class BoardController {
     @GetMapping("/board/modify/{id}")
     public String boardModify(@PathVariable("id") Integer id, Model model) {
 
+        // 상세페이지에 있는 내용과, 수정페이지의 내용이 같기 때문에 위 코드와 같은것을 확인할 수 있다
         model.addAttribute("board", boardService.boardview(id));
         return "boardmodify";
     }
 
+    // 수정 부분에도 MultilpartFile과 throw IOException 추가
     @PostMapping("/board/update/{id}")
-    public String boardUpdate(@PathVariable("id") Integer id, Board board) {
+    public String boardUpdate(@PathVariable("id") Integer id, Board board, MultipartFile file)throws Exception {
         // 기존에 있던 글이 담겨온다
         Board boardTemp = boardService.boardview(id);
 
@@ -80,7 +83,7 @@ public class BoardController {
         boardTemp.setTitle(board.getTitle());
         boardTemp.setContent(board.getContent());
 
-        boardService.write(boardTemp); // 수정한 내용을 boardService의 write부분에 넣기
+        boardService.write(boardTemp, file); // 수정한 내용을 boardService의 write부분에 넣기
         return "redirect:/board/list";
     }
 }
