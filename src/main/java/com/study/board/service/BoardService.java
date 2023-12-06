@@ -3,6 +3,8 @@ package com.study.board.service;
 import com.study.board.entity.Board;
 import com.study.board.repository.BoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,9 +37,9 @@ public class BoardService {
         file.transferTo(saveFile);
 
         /* db에 파일 넣기 */
-        board.setFilename(fileName);
+        board.setFilename(fileName);                // db에 파일 넣기
         /* 저장되는 경로 */
-        board.setFilepath("/files/" + fileName); /* 저장된 파일의 이름, 경로 */
+        board.setFilepath("/files/" + fileName);    // 저장되는 경로
 
         /* 파일 저장 */
         boardRepository.save(board);
@@ -45,9 +47,9 @@ public class BoardService {
     }
 
     // 게시글 리스트 처리
-    public List<Board> boardList(){
+    public Page<Board> boardList(Pageable pageable){
         // findAll : "Board" 라는 클래스가 담긴 List를 반환하는 것을 확인할 수 있다
-        return boardRepository.findAll();
+        return boardRepository.findAll(pageable);
     }
 
     // 특정 게시글 불러오기
