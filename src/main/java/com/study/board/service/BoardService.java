@@ -34,7 +34,9 @@ public class BoardService {
 
         file.transferTo(saveFile);
 
-        /* 디비에 파일 넣기 */
+        /* db에 파일 넣기 */
+        board.setFilename(fileName);
+        /* 저장되는 경로 */
         board.setFilepath("/files/" + fileName); /* 저장된 파일의 이름, 경로 */
 
         /* 파일 저장 */
