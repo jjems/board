@@ -3,6 +3,7 @@ package com.study.board.controller;
 import com.study.board.entity.Board;
 import com.study.board.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -42,18 +43,27 @@ public class BoardController {
         return "message";
     }
 
+    /* 페이징1 */
     @GetMapping("/board/list")
     public String boardList(Model model,
                             /* page: default페이지, size: 한 페이지 게시글 수, sort: 정렬 기준 컬럼, direction: 정렬 순서 */
                             @PageableDefault(page= 0, size= 10, sort= "id", direction= Sort.Direction.DESC)
                             Pageable pageable){
+        /* 페이징3 */
+        Page<Board> list = boardService.boardList(pageable);
+        int nowPage = list.getPageable().getPageNumber() + 1; /* pageable에서 넘어온 현재 페이지를 가지고 올 수 있다 */ /* 0부터 시작하므로 +1을 해준다 */
+        int startPage = Math.max(nowPage -4, 1); /* 매개변수로 들어온 두 값을 비교해서 큰 값을 반환 (1일 때, -3이 반환되면 안되므로) */
+        int endPage = Math.min(nowPage + 5, list.getTotalPages()); /* 마지막 페이지를 초과하면 안되므로 min으로 처리 */
 
         //BoardService에서 만들어준 boardList가 반환되는데, list라는 이름으로 받아서 넘기겠다는 뜻
-        model.addAttribute("list", boardService.boardList(pageable)); /* pageable 넘기기 */
+        model.addAttribute("list", list);
+        model.addAttribute("nowPage", nowPage);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+
         return "boardList";
     }
 
-    /* 상세페이지2 */
     @GetMapping("/board/view") //localhost:8090/board/view?id=1 // (get방식 파라미터)
     public String boardView(Model model, Integer id) {
         /* 상세페이지 4 */
@@ -70,7 +80,6 @@ public class BoardController {
         return "redirect:/board/list";
     }
 
-    // 수정
     // PathVariable은 modify 뒤에 있는 {id}가 인식되어 Integer형태의 id로 들어온다는 것
     @GetMapping("/board/modify/{id}")
     public String boardModify(@PathVariable("id") Integer id, Model model) {

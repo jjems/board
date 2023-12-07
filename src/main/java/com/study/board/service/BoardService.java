@@ -21,7 +21,7 @@ public class BoardService {
     // 글 작성 처리
     /* MultipartFile file 추가 */ /* 예외처리 */
     public void write(Board board, MultipartFile file) throws Exception {
-        /* 프로젝트 결로를 담아주게 된다 - 저장할 경로를 지정 */
+        /* 프로젝트 경로를 담아주게 된다 - 저장할 경로를 지정 */
         String projectPath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files";
 
         /* 식별자, 랜덤으로 이름 만들어줌 */
@@ -30,7 +30,6 @@ public class BoardService {
         /* 랜덤식별자_원래파일이름 = 저장될 파일이름 지정 */
         String fileName = uuid + "_" + file.getOriginalFilename();
 
-        /* 빈 껍데기 생성 */
         /* File을 생성할건데, 이름은 "name"으로 하고, projectPath라는 경로에 담긴다는 뜻 */
         File saveFile = new File(projectPath, fileName);
 
@@ -39,14 +38,14 @@ public class BoardService {
         /* db에 파일 넣기 */
         board.setFilename(fileName);                // db에 파일 넣기
         /* 저장되는 경로 */
-        board.setFilepath("/files/" + fileName);    // 저장되는 경로
+        board.setFilepath("/files/" + fileName);    // 저장된 파일의 이름, 저장된 파일의 경로
 
         /* 파일 저장 */
         boardRepository.save(board);
 
     }
 
-    // 게시글 리스트 처리
+    // 게시글 리스트 처리 /* 페이징2 : pageable 넘겨주기 */
     public Page<Board> boardList(Pageable pageable){
         // findAll : "Board" 라는 클래스가 담긴 List를 반환하는 것을 확인할 수 있다
         return boardRepository.findAll(pageable);
