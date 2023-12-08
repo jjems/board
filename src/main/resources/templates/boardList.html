@@ -25,7 +25,7 @@
         <!--//5번-->
         <!--list에 board가 담겨있는 것을 하나씩 빼준다-->
         <tr th:each="board: ${list}">
-            <td th:text="${board.id}">1</td>
+            <td th:text="${board.id}"></td>
             <td><!-- list와 상세 연결 -->
                 <!-- href a 태그에 링크를 걸어주는 역할 --><!-- localhost:8090/boar/view?id=board.id -->
                 <a th:text="${board.title}" th:href="@{/board/view(id=${board.id})}"></a>
