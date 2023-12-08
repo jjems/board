@@ -48,9 +48,19 @@ public class BoardController {
     public String boardList(Model model,
                             /* page: default페이지, size: 한 페이지 게시글 수, sort: 정렬 기준 컬럼, direction: 정렬 순서 */
                             @PageableDefault(page= 0, size= 10, sort= "id", direction= Sort.Direction.DESC)
-                            Pageable pageable){
-        /* 페이징3 */
-        Page<Board> list = boardService.boardList(pageable);
+                            Pageable pageable,
+                            String searchKeyword){
+
+        /* 검색 기능3 */
+        Page<Board> list = null;
+
+        /* searchKeyword = 검색하는 단어 */
+        if (searchKeyword == null) {
+            list = boardService.boardList(pageable); // 기존의 리스트를 보여줌
+        }else{
+            list = boardService.boardSearchList(searchKeyword, pageable); // 검색 리스트 반환
+        }
+
         int nowPage = list.getPageable().getPageNumber() + 1; /* pageable에서 넘어온 현재 페이지를 가지고 올 수 있다 */ /* 0부터 시작하므로 +1을 해준다 */
         int startPage = Math.max(nowPage -4, 1); /* 매개변수로 들어온 두 값을 비교해서 큰 값을 반환 (1일 때, -3이 반환되면 안되므로) */
         int endPage = Math.min(nowPage + 5, list.getTotalPages()); /* 마지막 페이지를 초과하면 안되므로 min으로 처리 */

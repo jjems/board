@@ -35,12 +35,22 @@
         </tbody>
     </table>
 
-    <!-- 페이징4 -->
     <!-- 굳이 태그로 감쌀 필요가 없는 부분을 타임리프 문법을 사용할 때 쓰는 문법 th:block -->
     <th:block th:each="page: ${#numbers.sequence(startPage, endPage)}">
-        <a th:if="${page != nowPage}" th:href="@{/board/list(page=${page -1})}" th:text="${page}"></a>
+        <!-- 검색 기능4 -->
+        <a th:if="${page != nowPage}"
+           th:href="@{/board/list(page=${page -1}, searchKeyword = ${param.searchKeyword})}"
+           th:text="${page}">
+
+        </a>
         <strong th:if="${page == nowPage}" th:text="${page}" style="color: red"></strong>
     </th:block>
+
+    <!-- 검색 기능5 -->
+    <form th:action="@{/board/list}" method="get">
+        <input type="text" name="searchKeyword"/>
+        <button type="submit">검색</button>
+    </form>
 </div>
 
 </body>

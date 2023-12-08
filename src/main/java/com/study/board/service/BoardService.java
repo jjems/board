@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -49,6 +48,12 @@ public class BoardService {
     public Page<Board> boardList(Pageable pageable){
         // findAll : "Board" 라는 클래스가 담긴 List를 반환하는 것을 확인할 수 있다
         return boardRepository.findAll(pageable);
+    }
+
+    /* 검색 기능2 */
+    // 검색
+    public Page<Board> boardSearchList(String searchKeyword, Pageable pageable) {
+        return boardRepository.findByTitleContaining(searchKeyword, pageable);
     }
 
     // 특정 게시글 불러오기
